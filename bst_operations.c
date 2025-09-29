@@ -1,14 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// Define node structure
+
 struct Node {
     int data;
     struct Node* left;
     struct Node* right;
 };
 
-// Create new node
 struct Node* createNode(int val) {
     struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
     newNode->data = val;
@@ -16,7 +15,6 @@ struct Node* createNode(int val) {
     return newNode;
 }
 
-// Insert node (BST style)
 struct Node* insert(struct Node* root, int val) {
     if (root == NULL)
         return createNode(val);
@@ -29,7 +27,6 @@ struct Node* insert(struct Node* root, int val) {
     return root;
 }
 
-// Search node by key
 struct Node* search(struct Node* root, int key) {
     if (root == NULL || root->data == key)
         return root;
@@ -40,7 +37,6 @@ struct Node* search(struct Node* root, int key) {
         return search(root->right, key);
 }
 
-// Inorder traversal (left, root, right)
 void inorder(struct Node* root) {
     if (root == NULL)
         return;
@@ -49,14 +45,12 @@ void inorder(struct Node* root) {
     inorder(root->right);
 }
 
-// Find minimum value node (used for delete with 2 children)
 struct Node* findMin(struct Node* root) {
     while (root->left != NULL)
         root = root->left;
     return root;
 }
 
-// Delete a node
 struct Node* deleteNode(struct Node* root, int key) {
     if (root == NULL)
         return NULL;
@@ -66,13 +60,12 @@ struct Node* deleteNode(struct Node* root, int key) {
     } else if (key > root->data) {
         root->right = deleteNode(root->right, key);
     } else {
-        // Node found
-        // Case 1: No child
+        Case 1: No child
         if (root->left == NULL && root->right == NULL) {
             free(root);
             return NULL;
         }
-        // Case 2: One child
+        Case 2: One child
         else if (root->left == NULL) {
             struct Node* temp = root->right;
             free(root);
@@ -82,7 +75,7 @@ struct Node* deleteNode(struct Node* root, int key) {
             free(root);
             return temp;
         }
-        // Case 3: Two children
+         Case 3: Two children
         struct Node* temp = findMin(root->right);
         root->data = temp->data;
         root->right = deleteNode(root->right, temp->data);
@@ -91,11 +84,9 @@ struct Node* deleteNode(struct Node* root, int key) {
     return root;
 }
 
-// Main function to test
 int main() {
     struct Node* root = NULL;
 
-    // Create binary tree by inserting nodes
     root = insert(root, 50);
     root = insert(root, 30);
     root = insert(root, 70);
@@ -108,7 +99,6 @@ int main() {
     inorder(root);
     printf("\n");
 
-    // Search for a node
     int key = 40;
     struct Node* found = search(root, key);
     if (found)
@@ -116,7 +106,6 @@ int main() {
     else
         printf("Node %d not found.\n", key);
 
-    // Delete nodes
     root = deleteNode(root, 70); // node with two children
     root = deleteNode(root, 20); // node with no child
     root = deleteNode(root, 30); // node with one child
